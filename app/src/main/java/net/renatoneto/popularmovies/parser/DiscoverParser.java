@@ -2,8 +2,11 @@ package net.renatoneto.popularmovies.parser;
 
 import net.renatoneto.popularmovies.model.Movie;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class DiscoverParser {
 
@@ -13,16 +16,25 @@ public class DiscoverParser {
         jsonObject = new JSONObject(json);
     }
 
-    public Movie parse(int position) throws JSONException {
+    public ArrayList<Movie> parse() throws JSONException {
 
-        Movie parsedMovie = new Movie(
-            getId(position),
-            getOriginalTitle(position),
-            getOverview(position),
-            getPosterPath(position)
-        );
+        ArrayList movies = new ArrayList<Movie>();
+        JSONArray result = jsonObject.getJSONArray("results");
 
-        return parsedMovie;
+        for (int i = 0; i < result.length(); i++) {
+
+            Movie parsedMovie = new Movie(
+                    getId(i),
+                    getOriginalTitle(i),
+                    getOverview(i),
+                    getPosterPath(i)
+            );
+
+            movies.add(i, parsedMovie);
+
+        }
+
+        return movies;
 
     }
 
@@ -43,7 +55,7 @@ public class DiscoverParser {
     }
 
     protected JSONObject getResult(int position) throws JSONException {
-        return jsonObject.getJSONArray("result").getJSONObject(position);
+        return jsonObject.getJSONArray("results").getJSONObject(position);
     }
 
 }

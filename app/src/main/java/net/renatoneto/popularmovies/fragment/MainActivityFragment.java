@@ -56,21 +56,30 @@ public class MainActivityFragment extends Fragment {
                         "/3Ypk0OLrECSp7tqQFLMppGBrHfo.jpg"
                 )
         };
-
-        mMovieAdapter = new MovieAdapter(getActivity(), Arrays.asList(movies));
+//Arrays.asList(movies)
+        mMovieAdapter = new MovieAdapter(getActivity(), new ArrayList<Movie>());
 
         ListView listView = (ListView) rootView.findViewById(R.id.list_movies);
         listView.setAdapter(mMovieAdapter);
 
+        discoverMovies();
+
         return rootView;
     }
 
-    public class DiscoverTask extends AsyncTask<String, Void, ArrayList> {
+    protected void discoverMovies() {
+
+        DiscoverTask discoverTask = new DiscoverTask();
+        discoverTask.execute();
+
+    }
+
+    public class DiscoverTask extends AsyncTask<String, Void, ArrayList<Movie>> {
 
         private final String TAG = DiscoverTask.class.getSimpleName();
 
         @Override
-        protected ArrayList doInBackground(String[] params) {
+        protected ArrayList<Movie> doInBackground(String[] params) {
 
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
@@ -82,10 +91,10 @@ public class MainActivityFragment extends Fragment {
                 final String API_BASE_URL =
                         "https://api.themoviedb.org/3/discover/movie?";
 
-                final String APP_ID_PARAM = "app_id";
+                final String API_KEY_PARAM = "api_key";
 
                 Uri builtUrl = Uri.parse(API_BASE_URL).buildUpon()
-                        .appendQueryParameter(APP_ID_PARAM, "your_api_key_here")
+                        .appendQueryParameter(API_KEY_PARAM, "")
                         .build();
 
                 URL url = new URL(builtUrl.toString());
@@ -140,14 +149,7 @@ public class MainActivityFragment extends Fragment {
             try {
 
                 DiscoverParser parser = new DiscoverParser(discoveredJson);
-
-                ArrayList movies = new ArrayList<Movie>();
-                for(int i = 0; i < discoveredJson.length(); i++) {
-
-                    Movie movie = parser.parse(i);
-                    movies.add(i, movie);
-
-                }
+                ArrayList<Movie> movies = parser.parse();
 
                 return movies;
             } catch (JSONException e) {
@@ -158,9 +160,9 @@ public class MainActivityFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(ArrayList result) {
+        protected void onPostExecute(ArrayList<Movie> result) {
 
-            /*if (result != null) {
+            if (result != null) {
 
                 mMovieAdapter.clear();
 
@@ -168,7 +170,7 @@ public class MainActivityFragment extends Fragment {
                     mMovieAdapter.add(result.get(i));
                 }
 
-            }*/
+            }
 
             super.onPostExecute(result);
         }
