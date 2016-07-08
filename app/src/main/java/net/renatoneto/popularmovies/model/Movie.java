@@ -1,5 +1,7 @@
 package net.renatoneto.popularmovies.model;
 
+import android.util.Log;
+
 public class Movie {
 
     protected int id;
@@ -29,6 +31,10 @@ public class Movie {
     }
 
     public String getPosterPath(String format) {
+
+        if (this.posterPath == null || this.posterPath.equals("null")) {
+            return "";
+        }
 
         if (format == null) {
             format = "w185";

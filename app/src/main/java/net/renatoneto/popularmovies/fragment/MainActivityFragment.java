@@ -1,8 +1,10 @@
 package net.renatoneto.popularmovies.fragment;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -69,8 +71,16 @@ public class MainActivityFragment extends Fragment {
 
     protected void discoverMovies() {
 
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(getActivity());
+
+        String order = preferences.getString(
+            (String)getText(R.string.pref_movies_order_key),
+            (String)getText(R.string.pref_movies_order_default)
+        );
+
         DiscoverTask discoverTask = new DiscoverTask();
-        discoverTask.execute();
+        discoverTask.execute(order);
 
     }
 
@@ -92,9 +102,11 @@ public class MainActivityFragment extends Fragment {
                         "https://api.themoviedb.org/3/discover/movie?";
 
                 final String API_KEY_PARAM = "api_key";
+                final String SORT_BY_PARAM = "sort_by";
 
                 Uri builtUrl = Uri.parse(API_BASE_URL).buildUpon()
                         .appendQueryParameter(API_KEY_PARAM, "")
+                        .appendQueryParameter(SORT_BY_PARAM, params[0])
                         .build();
 
                 URL url = new URL(builtUrl.toString());
