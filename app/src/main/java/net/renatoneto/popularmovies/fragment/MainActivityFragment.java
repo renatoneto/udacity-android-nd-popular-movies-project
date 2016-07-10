@@ -1,6 +1,7 @@
 package net.renatoneto.popularmovies.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -11,9 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import net.renatoneto.popularmovies.R;
+import net.renatoneto.popularmovies.activity.DetailsActivity;
 import net.renatoneto.popularmovies.adapter.MovieAdapter;
 import net.renatoneto.popularmovies.model.Movie;
 import net.renatoneto.popularmovies.parser.DiscoverParser;
@@ -31,7 +34,9 @@ import java.util.ArrayList;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements AdapterView.OnItemClickListener {
+
+    final String TAG = MainActivityFragment.class.getSimpleName();
 
     private MovieAdapter mMovieAdapter;
 
@@ -50,10 +55,22 @@ public class MainActivityFragment extends Fragment {
 
         GridView gridView = (GridView) rootView.findViewById(R.id.grid_movies);
         gridView.setAdapter(mMovieAdapter);
+        gridView.setOnItemClickListener(this);
 
         discoverMovies();
 
         return rootView;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Movie movie = (Movie) parent.getAdapter().getItem(position);
+
+        Intent intent = new Intent(getActivity(), DetailsActivity.class);
+        intent.putExtra("movie", movie);
+
+        startActivity(intent);
     }
 
     protected void discoverMovies() {
@@ -62,8 +79,8 @@ public class MainActivityFragment extends Fragment {
                 .getDefaultSharedPreferences(getActivity());
 
         String order = preferences.getString(
-                (String) getText(R.string.pref_movies_order_key),
-                (String) getText(R.string.pref_movies_order_default)
+            (String)getText(R.string.pref_movies_order_key),
+            (String)getText(R.string.pref_movies_order_default)
         );
 
         DiscoverTask discoverTask = new DiscoverTask();
@@ -80,8 +97,8 @@ public class MainActivityFragment extends Fragment {
 
             if (mProgressDialog == null) {
                 mProgressDialog = new ProgressDialog(getContext());
-                mProgressDialog.setTitle("Loading");
-                mProgressDialog.setMessage("Loading movies...");
+                mProgressDialog.setTitle(R.string.loading_movies_title);
+                mProgressDialog.setMessage(getText(R.string.loading_movies_message));
             }
 
             mProgressDialog.show();
@@ -105,7 +122,7 @@ public class MainActivityFragment extends Fragment {
                 final String SORT_BY_PARAM = "sort_by";
 
                 Uri builtUrl = Uri.parse(API_BASE_URL).buildUpon()
-                        .appendQueryParameter(API_KEY_PARAM, "")
+                        .appendQueryParameter(API_KEY_PARAM, "api_key_here")
                         .appendQueryParameter(SORT_BY_PARAM, params[0])
                         .build();
 

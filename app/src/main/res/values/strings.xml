@@ -3,9 +3,12 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
 
-    <!-- Strings related to Settings -->
+    <string name="loading_movies_title">Loading</string>
+    <string name="loading_movies_message">Wait, loading movies :)</string>
 
-    <!-- Example General settings -->
+    <string name="release_date_title">Release date</string>
+
+    <!-- Strings related to Settings -->
     <string name="pref_header_general">General</string>
     <string name="pref_movies_order_key">pref_location_key</string>
     <string name="pref_movies_order_default">@string/pref_movies_order_popularity</string>
@@ -21,5 +24,7 @@
         <item>@string/pref_movies_order_popularity</item>
         <item>@string/pref_movies_order_vote</item>
     </string-array>
+
+    <string name="title_activity_details">Movie Details</string>
 
 </resources>

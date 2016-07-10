@@ -11,6 +11,8 @@ import net.renatoneto.popularmovies.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    final String TAG = MainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,4 +46,5 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

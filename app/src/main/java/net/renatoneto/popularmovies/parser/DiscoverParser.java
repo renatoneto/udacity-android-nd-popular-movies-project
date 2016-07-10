@@ -23,12 +23,15 @@ public class DiscoverParser {
 
         for (int i = 0; i < result.length(); i++) {
 
-            Movie parsedMovie = new Movie(
-                    getId(i),
-                    getOriginalTitle(i),
-                    getOverview(i),
-                    getPosterPath(i)
-            );
+            Movie parsedMovie = new Movie(null);
+
+            parsedMovie.setId(getId(i));
+            parsedMovie.setOriginalTitle(getOriginalTitle(i));
+            parsedMovie.setOverview(getOverview(i));
+            parsedMovie.setPosterPath(getPosterPath(i));
+            parsedMovie.setBackdropPath(getBackdropPath(i));
+            parsedMovie.setVoteAverage(getVoteAverage(i));
+            parsedMovie.setReleaseDate(getReleaseDate(i));
 
             movies.add(i, parsedMovie);
 
@@ -52,6 +55,18 @@ public class DiscoverParser {
 
     public String getPosterPath(int position) throws JSONException {
         return getResult(position).getString("poster_path");
+    }
+
+    public String getBackdropPath(int position) throws JSONException {
+        return getResult(position).getString("backdrop_path");
+    }
+
+    public double getVoteAverage(int position) throws JSONException {
+        return getResult(position).getDouble("vote_average");
+    }
+
+    public String getReleaseDate(int position) throws JSONException {
+        return getResult(position).getString("release_date");
     }
 
     protected JSONObject getResult(int position) throws JSONException {

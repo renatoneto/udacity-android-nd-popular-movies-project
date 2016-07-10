@@ -28,6 +28,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.renatoneto.popularmovies.activity.MainActivity" />
         </activity>
+        <activity
+            android:name=".activity.DetailsActivity"
+            android:label="@string/title_activity_details"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.renatoneto.popularmovies.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

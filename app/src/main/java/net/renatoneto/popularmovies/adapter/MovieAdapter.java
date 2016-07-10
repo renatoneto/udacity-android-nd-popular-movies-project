@@ -36,8 +36,6 @@ public class MovieAdapter extends ArrayAdapter<Movie> {
         ImageView posterPathView = (ImageView) convertView.findViewById(R.id.image_movie_list);
         String posterPath = movie.getPosterPath("w342");
 
-        //Log.v(TAG, posterPath);
-
         if (posterPath != null && posterPath.length() > 0) {
             Picasso.with(getContext())
                     .load(posterPath)
