@@ -1,7 +1,6 @@
 package net.renatoneto.popularmovies.adapter;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import com.squareup.picasso.Picasso;
 
 import net.renatoneto.popularmovies.R;
 import net.renatoneto.popularmovies.model.Movie;
-import net.renatoneto.popularmovies.picasso.CircleTransform;
 
 import java.util.List;
 
@@ -36,16 +34,13 @@ public class MovieAdapter extends ArrayAdapter<Movie> {
         }
 
         ImageView posterPathView = (ImageView) convertView.findViewById(R.id.image_movie_list);
-        String posterPath        = movie.getPosterPath(null);
+        String posterPath = movie.getPosterPath("w342");
 
-        Log.v(TAG, posterPath);
+        //Log.v(TAG, posterPath);
 
         if (posterPath != null && posterPath.length() > 0) {
             Picasso.with(getContext())
                     .load(posterPath)
-                    .resize(150, 150)
-                    .centerCrop()
-                    .transform(new CircleTransform())
                     .into(posterPathView);
         }
 

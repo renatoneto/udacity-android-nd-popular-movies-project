@@ -1,14 +1,11 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<GridView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/grid_movies"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:showIn="@layout/activity_main"
-    tools:context=".fragment.MainActivityFragment">
-
-    <ListView
-        android:id="@+id/list_movies"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
-
-</LinearLayout>
+    android:numColumns="auto_fit"
+    android:columnWidth="@dimen/item_movie_width"
+    android:horizontalSpacing="@dimen/item_movie_spacing"
+    android:verticalSpacing="@dimen/item_movie_spacing"
+    android:padding="@dimen/item_movie_padding"
+    android:focusable="true"
+    android:clickable="true" />

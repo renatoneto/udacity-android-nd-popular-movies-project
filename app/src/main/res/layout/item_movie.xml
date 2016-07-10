@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:gravity="center_vertical"
-    android:paddingLeft="@dimen/item_movie_padding_left"
-    android:paddingStart="@dimen/item_movie_padding_left"
-    android:paddingRight="@dimen/item_movie_padding_right"
-    android:paddingEnd="@dimen/item_movie_padding_right">
-
-    <ImageView
-        android:id="@+id/image_movie_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/item_movie_image_margin_right"
-        android:layout_marginEnd="@dimen/item_movie_image_margin_right" />
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/item_movie_height">
 
     <TextView
         android:id="@+id/text_movie_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:ellipsize="end"
+        android:textColor="@android:color/darker_gray"/>
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/image_movie_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+
+</FrameLayout>
