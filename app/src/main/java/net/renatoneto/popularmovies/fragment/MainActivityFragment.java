@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -34,7 +36,7 @@ import java.util.ArrayList;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class MainActivityFragment extends Fragment implements AdapterView.OnItemClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     final String TAG = MainActivityFragment.class.getSimpleName();
 
@@ -57,6 +59,11 @@ public class MainActivityFragment extends Fragment implements AdapterView.OnItem
         gridView.setAdapter(mMovieAdapter);
         gridView.setOnItemClickListener(this);
 
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(getActivity());
+
+        preferences.registerOnSharedPreferenceChangeListener(this);
+
         discoverMovies();
 
         return rootView;
@@ -73,7 +80,19 @@ public class MainActivityFragment extends Fragment implements AdapterView.OnItem
         startActivity(intent);
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+        Log.v(TAG,key);
+        if (key.equals(getText(R.string.pref_movies_order_key))) {
+            discoverMovies();
+        }
+
+    }
+
     protected void discoverMovies() {
+
+        Log.v(TAG, "discoverMovies");
 
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
@@ -116,14 +135,13 @@ public class MainActivityFragment extends Fragment implements AdapterView.OnItem
             try {
 
                 final String API_BASE_URL =
-                        "https://api.themoviedb.org/3/discover/movie?";
+                        "https://api.themoviedb.org/3/movie/"
+                                + params[0] + "?";
 
                 final String API_KEY_PARAM = "api_key";
-                final String SORT_BY_PARAM = "sort_by";
 
                 Uri builtUrl = Uri.parse(API_BASE_URL).buildUpon()
                         .appendQueryParameter(API_KEY_PARAM, "api_key_here")
-                        .appendQueryParameter(SORT_BY_PARAM, params[0])
                         .build();
 
                 URL url = new URL(builtUrl.toString());

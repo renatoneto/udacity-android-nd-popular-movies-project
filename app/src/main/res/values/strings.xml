@@ -10,10 +10,10 @@
 
     <!-- Strings related to Settings -->
     <string name="pref_header_general">General</string>
-    <string name="pref_movies_order_key">pref_location_key</string>
+    <string name="pref_movies_order_key">pref_order_type_key</string>
     <string name="pref_movies_order_default">@string/pref_movies_order_popularity</string>
-    <string name="pref_movies_order_popularity">popularity.desc</string>
-    <string name="pref_movies_order_vote">vote_average.desc</string>
+    <string name="pref_movies_order_popularity">popular</string>
+    <string name="pref_movies_order_vote">top_rated</string>
 
     <string name="pref_title_generaL_order">Movies order</string>
     <string-array name="pref_general_movies_order_titles">
