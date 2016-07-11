@@ -1,5 +1,6 @@
 package net.renatoneto.popularmovies.fragment;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,13 +37,28 @@ import java.util.ArrayList;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements AdapterView.OnItemClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class MainActivityFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     final String TAG = MainActivityFragment.class.getSimpleName();
 
     private MovieAdapter mMovieAdapter;
 
     private ProgressDialog mProgressDialog;
+
+    private Boolean mShowLoading;
+
+    SharedPreferences.OnSharedPreferenceChangeListener preferenceListener =
+            new SharedPreferences.OnSharedPreferenceChangeListener() {
+
+        public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+
+            if (isAdded() && key.equals(getText(R.string.pref_movies_order_key))) {
+                mShowLoading = false;
+                discoverMovies();
+            }
+
+        }
+    };
 
     public MainActivityFragment() {
     }
@@ -53,17 +69,20 @@ public class MainActivityFragment extends Fragment implements AdapterView.OnItem
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        mMovieAdapter = new MovieAdapter(getActivity(), new ArrayList<Movie>());
+        Activity activity = getActivity();
+
+        mMovieAdapter = new MovieAdapter(activity, new ArrayList<Movie>());
 
         GridView gridView = (GridView) rootView.findViewById(R.id.grid_movies);
         gridView.setAdapter(mMovieAdapter);
         gridView.setOnItemClickListener(this);
 
         SharedPreferences preferences = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
+                .getDefaultSharedPreferences(activity);
 
-        preferences.registerOnSharedPreferenceChangeListener(this);
+        preferences.registerOnSharedPreferenceChangeListener(preferenceListener);
 
+        mShowLoading = true;
         discoverMovies();
 
         return rootView;
@@ -80,19 +99,7 @@ public class MainActivityFragment extends Fragment implements AdapterView.OnItem
         startActivity(intent);
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-        Log.v(TAG,key);
-        if (key.equals(getText(R.string.pref_movies_order_key))) {
-            discoverMovies();
-        }
-
-    }
-
     protected void discoverMovies() {
-
-        Log.v(TAG, "discoverMovies");
 
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
@@ -114,13 +121,17 @@ public class MainActivityFragment extends Fragment implements AdapterView.OnItem
         @Override
         protected void onPreExecute() {
 
-            if (mProgressDialog == null) {
-                mProgressDialog = new ProgressDialog(getContext());
-                mProgressDialog.setTitle(R.string.loading_movies_title);
-                mProgressDialog.setMessage(getText(R.string.loading_movies_message));
-            }
+            if (mShowLoading) {
 
-            mProgressDialog.show();
+                if (mProgressDialog == null) {
+                    mProgressDialog = new ProgressDialog(getContext());
+                    mProgressDialog.setTitle(R.string.loading_movies_title);
+                    mProgressDialog.setMessage(getText(R.string.loading_movies_message));
+                }
+
+                mProgressDialog.show();
+
+            }
 
         }
 
@@ -219,7 +230,7 @@ public class MainActivityFragment extends Fragment implements AdapterView.OnItem
 
             }
 
-            mProgressDialog.dismiss();
+            if (mShowLoading) mProgressDialog.dismiss();
 
             super.onPostExecute(result);
         }
